@@ -1,0 +1,22 @@
+{
+  "image_id": "teste_0001",
+  "topk": [
+    {
+      "id": "asparagus_fern",
+      "nome": "Asparagus Fern",
+      "score": 0.37
+    },
+    {
+      "id": "areca_palm",
+      "nome": "Areca Palm",
+      "score": 0.35
+    },
+    {
+      "id": "aloe_vera",
+      "nome": "Aloe Vera",
+      "score": 0.15
+    }
+  ],
+  "model_version": "svm-v1",
+  "latency_ms": 1288
+}

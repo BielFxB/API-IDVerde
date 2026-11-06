@@ -1,0 +1,29 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Caches e ambientes virtuais
+.pytest_cache/
+.venv/
+venv/
+env/
+ENV/
+
+# Arquivo original de 112MB que estoura o limite de 100MB do GitHub
+# O projeto utiliza modelo_svm.joblib (60MB) que é aceito nativamente
+modelo_svm.pkl
+
+# IDEs e editores
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+

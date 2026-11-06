@@ -1,0 +1,85 @@
+{
+  "info": {
+    "name": "IDVerde - API de Reconhecimento Botânico",
+    "_postman_id": "c1a2e3d4-5678-90ab-cdef-1234567890ab",
+    "description": "Coleção de endpoints da API REST do projeto IDVerde (UFGD) para classificação de plantas via IA.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check (Saúde da API)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/health",
+          "host": ["{{base_url}}"],
+          "path": ["health"]
+        }
+      }
+    },
+    {
+      "name": "Catálogo de Espécies",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/species",
+          "host": ["{{base_url}}"],
+          "path": ["species"]
+        }
+      }
+    },
+    {
+      "name": "Classificar Planta (Multipart / Form-Data)",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "image",
+              "type": "file",
+              "src": []
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/predict",
+          "host": ["{{base_url}}"],
+          "path": ["predict"]
+        }
+      }
+    },
+    {
+      "name": "Classificar Planta (JSON Base64)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"image\": \"data:image/jpeg;base64,/9j/4AAQSkZJRg...\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/predict",
+          "host": ["{{base_url}}"],
+          "path": ["predict"]
+        }
+      }
+    }
+  ]
+}
+

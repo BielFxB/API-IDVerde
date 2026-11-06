@@ -1,0 +1,15 @@
+.git
+.gitignore
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.venv
+env/
+venv/
+.idea
+.vscode
+*.log
+modelo_svm.pkl
+Plantas/
+
