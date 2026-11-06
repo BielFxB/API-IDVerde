@@ -3,12 +3,7 @@
  * Utilizando FormData e fetch nativo
  */
 
-// ATENÇÃO PARA O BASE_URL:
-// - Emulador Android Studio: 'http://10.0.2.2:5000'
-// - Simulador iOS: 'http://localhost:5000'
-// - Dispositivo físico (Expo Go na mesma rede Wi-Fi): 'http://SEU_IP_LOCAL:5000'
-// - API Hospedada (Nuvem): 'https://sua-api.onrender.com'
-const BASE_URL = 'http://10.0.2.2:5000';
+const BASE_URL = 'https://apiidverde.gamycoins.com.br';
 
 /**
  * Envia uma foto selecionada com expo-image-picker ou react-native-image-picker

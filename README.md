@@ -168,14 +168,13 @@ Classifica a foto de uma planta enviada pelo app mobile.
 
 ### Endereço da API (Base URL)
 
-Ao testar no aplicativo, atenção ao endereço configurado como `BASE_URL`:
+Para integrar o aplicativo mobile com a API, utilize a URL oficial em produção:
 
-| Ambiente do App | Configuração da `BASE_URL` |
-| :--- | :--- |
-| **Emulador Android Studio** | `http://10.0.2.2:5000` *(o Android mapeia 10.0.2.2 para o localhost do seu PC)* |
-| **Simulador iOS (Mac)** | `http://localhost:5000` |
-| **Dispositivo Físico (Wi-Fi)** | `http://192.168.X.X:5000` *(IP do seu computador na rede Wi-Fi)* |
-| **Hospedado na Nuvem (Render)** | `https://sua-api.onrender.com` *(produção)* |
+```
+https://apiidverde.gamycoins.com.br
+```
+
+> **Nota:** Como a API está rodando com HTTPS público via Cloudflare, ela funciona diretamente em qualquer dispositivo (Android, iOS ou emuladores), sem necessidade de configurações de rede local ou liberação de tráfego HTTP sem segurança (`cleartextTraffic`).
 
 ---
 
@@ -195,8 +194,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 class IDVerdeService {
-  // Ajuste a URL conforme seu ambiente (10.0.2.2 para emulador Android)
-  static const String baseUrl = 'http://10.0.2.2:5000';
+  static const String baseUrl = 'https://apiidverde.gamycoins.com.br';
 
   static Future<Map<String, dynamic>> identificarPlanta(File imageFile) async {
     final uri = Uri.parse('$baseUrl/predict');
@@ -239,6 +237,8 @@ try {
 ### Exemplo em React Native
 
 ```javascript
+const BASE_URL = 'https://apiidverde.gamycoins.com.br';
+
 export async function identificarPlanta(imageUri) {
   const formData = new FormData();
   
@@ -248,7 +248,7 @@ export async function identificarPlanta(imageUri) {
     type: 'image/jpeg',
   });
 
-  const response = await fetch('http://10.0.2.2:5000/predict', {
+  const response = await fetch(`${BASE_URL}/predict`, {
     method: 'POST',
     body: formData,
     headers: {
@@ -272,7 +272,7 @@ export async function identificarPlanta(imageUri) {
 
 Testando a classificação pelo terminal:
 ```bash
-curl -X POST http://localhost:5000/predict \
+curl -X POST https://apiidverde.gamycoins.com.br/predict \
   -F "image=@Plantas/African Violet/1.jpg"
 ```
 

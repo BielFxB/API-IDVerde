@@ -78,14 +78,9 @@ class RespostaIDVerde {
 
 /// Serviço de comunicação HTTP com a API
 class IDVerdeService {
-  // ATENÇÃO:
-  // - No emulador Android: use 'http://10.0.2.2:5000'
-  // - No simulador iOS: use 'http://localhost:5000'
-  // - Em dispositivo físico na mesma rede Wi-Fi: use o IP local (ex: 'http://192.168.1.50:5000')
-  // - Em produção (Render / Cloud): use 'https://sua-api.onrender.com'
   final String baseUrl;
 
-  IDVerdeService({this.baseUrl = 'http://10.0.2.2:5000'});
+  IDVerdeService({this.baseUrl = 'https://apiidverde.gamycoins.com.br'});
 
   /// Envia a foto capturada pela câmera/galeria para classificação
   Future<RespostaIDVerde> classificarPlanta(File arquivoImagem) async {
