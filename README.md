@@ -1,29 +1,6 @@
 # 🌿 IDVerde - API de Reconhecimento de Espécies Vegetais por IA
 
-> **Projeto de Extensão Universitária - Universidade Federal da Grande Dourados (UFGD)**  
-> **Autores:** Gabriel Friol Xavier de Barros & Wanessa Pelegrino dos Santos  
-> **Orientação:** Profa. Dra. Priscila Marques Kai  
-> **Apoio:** FUNAEPE / PROEX / UFGD  
-
 API REST desenvolvida em Python (Flask) para classificação automatizada de espécies vegetais a partir de fotos tiradas por usuários, permitindo a comunicação em tempo real com o aplicativo mobile do projeto **IDVerde**.
-
----
-
-## 📌 Sumário
-- [Sobre o Projeto](#-sobre-o-projeto)
-- [Arquitetura de Inteligência Artificial](#-arquitetura-de-inteligência-artificial)
-- [Espécies Catalogadas](#-espécies-catalogadas)
-- [Atenção: Limite do GitHub e Otimização do Modelo](#-atenção-limite-do-github-e-otimização-do-modelo)
-- [Como Rodar Localmente](#-como-rodar-localmente)
-- [Documentação dos Endpoints](#-documentação-dos-endpoints)
-- [📲 Tutorial de Conexão para a Equipe Mobile](#-tutorial-de-conexão-para-a-equipe-mobile)
-  - [Endereço da API (Base URL)](#endereço-da-api-base-url)
-  - [Exemplo em Flutter (Dart)](#exemplo-em-flutter-dart)
-  - [Exemplo em React Native](#exemplo-em-react-native)
-  - [Exemplo via cURL](#exemplo-via-curl)
-- [☁️ Guia de Hospedagem na Nuvem (Render / Deploy Gratuito)](#️-guia-de-hospedagem-na-nuvem-render--deploy-gratuito)
-- [🚀 Como Subir o Projeto no GitHub](#-como-subir-o-projeto-no-github)
-- [Testes Automatizados](#-testes-automatizados)
 
 ---
 
@@ -58,57 +35,6 @@ O modelo atual foi treinado e valida 5 espécies botânicas:
 | `anthurium` | Anthurium | Antúrio | *Anthurium andreanum* | Araceae |
 | `areca_palm` | Areca Palm | Palmeira-areca / Areca-bambu | *Dypsis lutescens* | Arecaceae |
 | `asparagus_fern` | Asparagus Fern | Aspargo-samambaia / Melindre | *Asparagus setaceus* | Asparagaceae |
-
----
-
-## ⚠️ Atenção: Limite do GitHub e Otimização do Modelo
-
-O GitHub impõe um **limite estrito de 100 MB por arquivo**. Se você tentar fazer `git push` de um arquivo maior que 100 MB, o GitHub rejeitará o envio com erro de bloqueio.
-
-- O arquivo bruto de treino `modelo_svm.pkl` possui **112.6 MB**.
-- Por isso, geramos uma versão otimizada com compressão nativa: **`modelo_svm.joblib` (60.7 MB)**.
-- O arquivo `.gitignore` já está configurado para ignorar o `modelo_svm.pkl` e subir o `modelo_svm.joblib`.
-- A API detecta e carrega `modelo_svm.joblib` automaticamente. Se você treinar um novo modelo e precisar recompactar, basta executar:
-  ```bash
-  python converter_modelo.py
-  ```
-
----
-
-## 💻 Como Rodar Localmente
-
-### 1. Clonar ou abrir o repositório
-```bash
-git clone https://github.com/SEU_USUARIO/API-IA-IDVerde.git
-cd API-IA-IDVerde
-```
-
-### 2. Criar e ativar um ambiente virtual (recomendado)
-No Linux/macOS:
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-```
-No Windows (PowerShell):
-```powershell
-py -m venv .venv
-.venv\Scripts\Activate.ps1
-```
-
-### 3. Instalar as dependências
-```bash
-pip install -r requirements.txt
-```
-
-### 4. Iniciar o servidor
-```bash
-python app.py
-```
-A API iniciará em `http://localhost:5000`.
-
-### 5. Testador Visual Integrado
-Abra seu navegador em **`http://localhost:5000`**.  
-Você verá uma interface web interativa onde pode arrastar e soltar qualquer foto de planta para testar a predição em tempo real e visualizar o JSON de resposta!
 
 ---
 
@@ -238,7 +164,7 @@ Classifica a foto de uma planta enviada pelo app mobile.
 
 ---
 
-## 📲 Tutorial de Conexão para a Equipe Mobile
+## 📲 Tutorial de Conexão da API
 
 ### Endereço da API (Base URL)
 
@@ -352,7 +278,86 @@ curl -X POST http://localhost:5000/predict \
 
 ---
 
-## ☁️ Guia de Hospedagem na Nuvem (Render / Deploy Gratuito)
+## 🖥️ Hospedagem no seu Servidor Local (Linux + PM2 + Cloudflare Tunnel)
+
+Se você possui um servidor local (Linux, PM2 e Cloudflare Tunnel) como o ambiente do seu laboratório/máquina (`frdata@frdata:~`), esta é a melhor opção: custo zero, sem hibernação de plano gratuito e sob seu controle total.
+
+### 📊 Análise de Recursos no seu Servidor
+- **CPU:** Intel Core i5-2400 (4 núcleos / 4 threads) — A inferência do modelo SVM leva de 50ms a 150ms em uma única thread. O impacto de CPU é inferior a 1% em uso médio.
+- **Memória RAM:** 8 GB — A API consome aproximadamente **180 MB a 250 MB de RAM** com o modelo carregado em memória. Não haverá nenhuma interferência com seus outros serviços (Next.js nas portas 3000-3002 e FastAPI nas portas 8000-8001).
+- **Porta Escolhida:** Como as portas `3000`, `3001`, `3002`, `8000` e `8001` já estão em uso, configuramos a API por padrão para a **porta `5000`** (ou `8002`, configurável via variável de ambiente `PORT`).
+
+---
+
+### 🛠️ Passo a Passo no Terminal do Servidor (`frdata@frdata:~`)
+
+#### 1. Clonar o projeto no servidor
+```bash
+cd ~
+git clone https://github.com/SEU_USUARIO/API-IA-IDVerde.git
+cd API-IA-IDVerde
+```
+
+#### 2. Criar e ativar o ambiente virtual Python
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+#### 3. Iniciar com o PM2 (Arquivo `ecosystem.config.js` já incluso!)
+O projeto já inclui o arquivo `ecosystem.config.js` pré-configurado com Gunicorn, limite de memória e autorestart:
+```bash
+pm2 start ecosystem.config.js
+pm2 save
+```
+
+Para verificar o status e logs:
+```bash
+pm2 status
+pm2 logs idverde-api
+```
+
+#### 4. Testar localmente no servidor
+```bash
+curl http://127.0.0.1:5000/health
+```
+
+---
+
+### 🌐 Expondo com o Cloudflare Tunnel (`cloudflared`)
+
+Como seu servidor já utiliza o Cloudflare Tunnel, você não precisa abrir nenhuma porta no roteador.
+
+#### Opção A: Pelo Painel Web do Cloudflare (Zero Trust Dashboard)
+1. Acesse o **[Cloudflare One / Zero Trust](https://one.dash.cloudflare.com/)** > **Networks** > **Tunnels**.
+2. Clique no seu Túnel ativo e vá na aba **Public Hostname**.
+3. Clique em **Add a public hostname**:
+   - **Subdomain:** `idverde` (ou `plantas-api`, `api-idverde`)
+   - **Domain:** escolha seu domínio cadastrado (ex: `seudominio.com`)
+   - **Type:** `HTTP`
+   - **URL:** `localhost:5000` (ou `127.0.0.1:5000`)
+4. Salve. Em poucos segundos você terá a URL pública segura com SSL ativo:
+   `https://idverde.seudominio.com`
+
+#### Opção B: Pelo arquivo de configuração CLI (`~/.cloudflared/config.yml`)
+Se o seu túnel for configurado por arquivo local, adicione a rota de ingress:
+```yaml
+ingress:
+  - hostname: idverde.seudominio.com
+    service: http://localhost:5000
+  # Demais serviços existentes continuam abaixo...
+  - service: http_status:404
+```
+Reinicie o túnel:
+```bash
+sudo systemctl restart cloudflared
+```
+
+---
+
+## ☁️ Guia de Hospedagem Alternativa na Nuvem (Render / Deploy Gratuito)
 
 O repositório já vem preparado com `Dockerfile`, `Procfile` e `render.yaml`. O serviço gratuito mais simples e recomendado é o **Render**:
 
